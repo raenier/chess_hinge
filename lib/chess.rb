@@ -11,4 +11,16 @@ class Chess
   def set_board
     Array.new(8) { Array.new(8) }
   end
+
+  def display_board
+    column_strings = 'ABCDEFGH'
+    board_string = "    1   2   3   4   5   6   7   8\n"
+    board_string <<
+      board.each.with_index.reduce("  +---+---+---+---+---+---+---+---+\n") do |string, (column, i)|
+        string + "#{column_strings[i]} | #{column.map { |space| space ? space.symbol : ' ' }.join(' | ')} |\n"
+      end
+    board_string << "  +---+---+---+---+---+---+---+---+\n"
+
+    puts board_string
+  end
 end
