@@ -18,9 +18,10 @@ class Chess
     board_string = "    1   2   3   4   5   6   7   8\n"
     board_string +=
       board.each.with_index.reduce("  +---+---+---+---+---+---+---+---+\n") do |string, (column, i)|
-        string + "#{column_strings[i]} | #{column.map { |space| space ? space.symbol : ' ' }.join(' | ')} |\n"
+        string + "#{column_strings[i]} | #{column.map do |space|
+                                             space ? space.symbol : ' '
+                                           end.join(' | ')} |\n  +---+---+---+---+---+---+---+---+\n"
       end
-    board_string += "  +---+---+---+---+---+---+---+---+\n"
 
     puts board_string
   end
