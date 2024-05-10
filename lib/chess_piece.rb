@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ChessPiece
   attr_accessor :color, :initial_move, :unicode_symbol
 

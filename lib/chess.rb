@@ -1,8 +1,9 @@
+# frozen_string_literal: true
+
 require_relative './chess_pieces/pawn'
 
 class Chess
   attr_accessor :board
-
 
   def initialize
     self.board = set_board
@@ -15,11 +16,11 @@ class Chess
   def display_board
     column_strings = 'ABCDEFGH'
     board_string = "    1   2   3   4   5   6   7   8\n"
-    board_string <<
+    board_string +=
       board.each.with_index.reduce("  +---+---+---+---+---+---+---+---+\n") do |string, (column, i)|
         string + "#{column_strings[i]} | #{column.map { |space| space ? space.symbol : ' ' }.join(' | ')} |\n"
       end
-    board_string << "  +---+---+---+---+---+---+---+---+\n"
+    board_string += "  +---+---+---+---+---+---+---+---+\n"
 
     puts board_string
   end
