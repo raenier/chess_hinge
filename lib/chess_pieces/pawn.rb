@@ -1,8 +1,13 @@
 # frozen_string_literal: true
 
-require_relative 'chess_piece'
+require_relative '../chess_piece'
 
 class Pawn < ChessPiece
+  def initialize(color)
+    super(color)
+    self.unicode_symbol = { white: "\u2659", black: "\u265F" }
+  end
+
   def valid_move?(current_position, target_position, target_value = nil)
     return false if (target_position[0] - current_position[0]).abs > 1
 
