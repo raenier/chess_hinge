@@ -6,4 +6,8 @@ class Player
   def initialize(name)
     self.name = name
   end
+
+  def input
+    $stdin.gets.chomp
+  end
 end

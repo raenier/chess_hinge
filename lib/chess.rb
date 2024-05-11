@@ -73,5 +73,38 @@ class Chess
     @players[:black] = Player.new($stdin.gets.chomp)
 
     puts "#{@players[:white].name} starts the game:"
+
+    @players.each do |_color, player|
+      print 'pick piece to move: '
+      start_post = parse_input player
+      print 'new_position: '
+      target_post = parse_input player
+    end
+
+  end
+
+  def parse_input(player)
+    valid = false
+
+    until valid
+      input = player.input
+      valid = valid_input? input
+    end
+
+    input
+      .upcase
+      .gsub(/[A-Z]/) { |c| c.ord - 64 }
+      .split('')
+      .map { |c| c.to_i - 1 }
+  end
+
+  def valid_input?(input)
+    return true if input.size == 2 && !integer?(input[0]) && integer?(input[-1])
+
+    false
+  end
+
+  def integer?(string)
+    string.to_i.to_s == string
   end
 end
