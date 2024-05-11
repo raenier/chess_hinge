@@ -49,6 +49,8 @@ class Chess
   end
 
   def display_board
+    system('clear')
+
     column_strings = 'ABCDEFGH'
     board_string = "    1   2   3   4   5   6   7   8\n"
     board_string +=
