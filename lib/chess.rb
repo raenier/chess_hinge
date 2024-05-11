@@ -79,8 +79,15 @@ class Chess
       start_post = parse_input player
       print 'new_position: '
       target_post = parse_input player
-    end
 
+      move(start_post, target_post)
+      display_board
+    end
+  end
+
+  def move(start, target)
+    board[target[0]][target[1]] = board.dig(*start)
+    board[start[0]][start[1]] = nil
   end
 
   def parse_input(player)
