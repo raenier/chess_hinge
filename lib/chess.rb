@@ -85,6 +85,8 @@ class Chess
     end
   end
 
+  private
+
   def move(start, target)
     board[target[0]][target[1]] = board.dig(*start)
     board[start[0]][start[1]] = nil
