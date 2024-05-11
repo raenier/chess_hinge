@@ -6,6 +6,7 @@ require_relative './chess_pieces/knight'
 require_relative './chess_pieces/bishop'
 require_relative './chess_pieces/king'
 require_relative './chess_pieces/queen'
+require_relative './player'
 
 class Chess
   attr_accessor :board
@@ -13,6 +14,10 @@ class Chess
   def initialize
     self.board = set_board
     preset_pieces
+    @players = {
+      white: nil,
+      black: nil
+    }
   end
 
   def set_board
@@ -54,5 +59,17 @@ class Chess
       end
 
     puts board_string
+  end
+
+  def start
+    display_board
+    puts "\n  Let Start the chess_match!"
+
+    print "\nPlayer with white pieces, enter your NAME: "
+    @players[:white] = Player.new($stdin.gets.chomp)
+    print "\nPlayer with black pieces, enter your NAME: "
+    @players[:black] = Player.new($stdin.gets.chomp)
+
+    puts "#{@players[:white].name} starts the game:"
   end
 end
