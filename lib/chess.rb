@@ -75,8 +75,14 @@ class Chess
     puts "#{@players[:white].name} starts the game:"
 
     @players.each do |_color, player|
-      print 'pick piece to move: '
-      start_post = parse_input player
+    @players.each do |color, player|
+      valid_start = false
+      until valid_start
+        print 'pick piece to move: '
+        start_post = parse_input player
+        valid_start = board.dig(*start_post)&.color == color.to_s
+      end
+
       print 'new_position: '
       target_post = parse_input player
 
