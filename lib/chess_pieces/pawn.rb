@@ -12,8 +12,10 @@ class Pawn < ChessPiece
     return false if (target_position[0] - current_position[0]).abs > 1
 
     if target_position[0] == current_position[0]
-      return true if current_position[1] + 1 == target_position[1]
-      return true if current_position[1] + 2 == target_position[1] && initial_move
+      if (current_position[1] - target_position[1]).abs == 1 ||
+         (current_position[1] - target_position[1]).abs == 2 && initial_move
+        return true
+      end
     elsif target_value && target_value.color != color
       return true
     end
