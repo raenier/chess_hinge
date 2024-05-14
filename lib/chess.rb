@@ -74,24 +74,44 @@ class Chess
 
     puts "#{@players[:white].name} starts the game:"
 
-    @players.each do |_color, player|
-    @players.each do |color, player|
-      valid_start = false
-      until valid_start
-        print 'pick piece to move: '
-        start_post = parse_input player
-        valid_start = board.dig(*start_post)&.color == color.to_s
+    checkmate = false
+    until checkmate
+      @players.each do |color, player|
+        valid_start = false
+        until valid_start
+          print 'pick piece to move: '
+          start_post = parse_input player
+          start_piece = board.dig(*start_post)
+          valid_start = start_piece&.color == color.to_s
+        end
+
+        valid_position = false
+        until valid_position
+          print 'new_position: '
+          target_post = parse_input player
+          target_piece = board.dig(*target_post)
+          valid_position =
+            start_piece.valid_move?(start_post, target_post, target_piece) &&
+            inside_board?(target_post)
+        end
+
+        start_piece.initial_move = false
+        move(start_post, target_post)
+        display_board
       end
-
-      print 'new_position: '
-      target_post = parse_input player
-
-      move(start_post, target_post)
-      display_board
+      checkmate = checkmate?
     end
   end
 
   private
+
+  def checkmate?
+    false
+  end
+
+  def inside_board?(target_position)
+    target_position.all? { |i| i >= 0 && i < 8 }
+  end
 
   def move(start, target)
     board[target[0]][target[1]] = board.dig(*start)
