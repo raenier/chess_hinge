@@ -92,7 +92,8 @@ class Chess
           target_piece = board.dig(*target_post)
           valid_position =
             start_piece.valid_move?(start_post, target_post, target_piece) &&
-            inside_board?(target_post)
+            inside_board?(target_post) &&
+            no_obstacles?(start_post, target_post)
         end
 
         start_piece.initial_move = false
@@ -104,6 +105,26 @@ class Chess
   end
 
   private
+
+  def no_obstacles?(start_post, end_post)
+    return true if board.dig(*start_post).is_a? Knight
+
+    if start_post.first == end_post.first
+      (start_post.last...end_post.last).step(start_post.last > end_post.last ? -1 : 1).each do |row|
+        next if row == start_post.last
+
+        return false if board.dig(end_post.first, row)
+      end
+    elsif start_post.last == end_post.last
+      (start_post.first...end_post.first).step(start_post.first > end_post.first ? -1 : 1).each do |column|
+        next if column == start_post.first
+
+        return false if board.dig(column, end_post.last)
+      end
+    end
+
+    true
+  end
 
   def checkmate?
     false
