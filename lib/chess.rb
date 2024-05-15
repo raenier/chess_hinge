@@ -18,6 +18,10 @@ class Chess
       white: nil,
       black: nil
     }
+    @captured_pieces = {
+      white: [],
+      black: []
+    }
   end
 
   def set_board
@@ -97,7 +101,7 @@ class Chess
         end
 
         start_piece.initial_move = false
-        move(start_post, target_post)
+        move_and_capture(start_post, target_post)
         display_board
       end
       checkmate = checkmate?
@@ -134,8 +138,12 @@ class Chess
     target_position.all? { |i| i >= 0 && i < 8 }
   end
 
-  def move(start, target)
-    board[target[0]][target[1]] = board.dig(*start)
+  def move_and_capture(start, target)
+    piece = board.dig(*start)
+    target_piece = board.dig(*target)
+    @captured_pieces[target_piece.color.to_sym] << target_piece if target_piece
+
+    board[target[0]][target[1]] = piece
     board[start[0]][start[1]] = nil
   end
 
