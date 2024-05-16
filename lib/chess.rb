@@ -64,6 +64,9 @@ class Chess
                                            end.join(' | ')} |\n  +---+---+---+---+---+---+---+---+\n"
       end
 
+    board_string += "captured_pieces: \n" \
+                    "white: #{@captured_pieces[:white].map(&:class).join(', ')}\n" \
+                    "black: #{@captured_pieces[:black].map(&:class).join(', ')}\n"
     puts board_string
   end
 
