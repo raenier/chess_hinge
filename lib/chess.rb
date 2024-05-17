@@ -128,9 +128,24 @@ class Chess
 
         return false if board.dig(column, end_post.last)
       end
+    elsif diagonal?(start_post, end_post)
+      ydif = (end_post.first - start_post.first)
+      xdif = (end_post.last - start_post.last)
+
+      (xdif.abs - 1).times do |index|
+        step = index + 1
+        current_post = [ydif.negative? ? start_post.first - step : start_post.first + step,
+                        xdif.negative? ? start_post.last - step : start_post.last + step]
+
+        return false if board.dig(*current_post)
+      end
     end
 
     true
+  end
+
+  def diagonal?(start_post, end_post)
+    (start_post.first - end_post.first).abs == (start_post.last - end_post.last).abs
   end
 
   def checkmate?
