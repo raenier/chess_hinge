@@ -24,52 +24,6 @@ class Chess
     }
   end
 
-  def set_board
-    Array.new(8) { Array.new(8) }
-  end
-
-  def preset_pieces
-    board.each_with_index do |column, index|
-      column[-2] = Pawn.new('white')
-      column[1] = Pawn.new('black')
-
-      if [0, 7].include?(index)
-        column[-1] = Rook.new('white')
-        column[0] = Rook.new('black')
-      elsif [1, 6].include?(index)
-        column[-1] = Knight.new('white')
-        column[0] = Knight.new('black')
-      elsif [2, 5].include?(index)
-        column[-1] = Bishop.new('white')
-        column[0] = Bishop.new('black')
-      elsif index == 3
-        column[-1] = Queen.new('white')
-        column[0] = Queen.new('black')
-      elsif index == 4
-        column[-1] = King.new('white')
-        column[0] = King.new('black')
-      end
-    end
-  end
-
-  def display_board
-    system('clear')
-
-    column_strings = 'ABCDEFGH'
-    board_string = "    1   2   3   4   5   6   7   8\n"
-    board_string +=
-      board.each.with_index.reduce("  +---+---+---+---+---+---+---+---+\n") do |string, (column, i)|
-        string + "#{column_strings[i]} | #{column.map do |space|
-                                             space ? space.symbol : ' '
-                                           end.join(' | ')} |\n  +---+---+---+---+---+---+---+---+\n"
-      end
-
-    board_string += "captured_pieces: \n" \
-                    "white: #{@captured_pieces[:white].map(&:class).join(', ')}\n" \
-                    "black: #{@captured_pieces[:black].map(&:class).join(', ')}\n"
-    puts board_string
-  end
-
   def start
     display_board
     puts "\n  Let Start the chess_match!"
@@ -112,6 +66,52 @@ class Chess
   end
 
   private
+
+  def set_board
+    Array.new(8) { Array.new(8) }
+  end
+
+  def display_board
+    system('clear')
+
+    column_strings = 'ABCDEFGH'
+    board_string = "    1   2   3   4   5   6   7   8\n"
+    board_string +=
+      board.each.with_index.reduce("  +---+---+---+---+---+---+---+---+\n") do |string, (column, i)|
+        string + "#{column_strings[i]} | #{column.map do |space|
+                                             space ? space.symbol : ' '
+                                           end.join(' | ')} |\n  +---+---+---+---+---+---+---+---+\n"
+      end
+
+    board_string += "captured_pieces: \n" \
+                    "white: #{@captured_pieces[:white].map(&:class).join(', ')}\n" \
+                    "black: #{@captured_pieces[:black].map(&:class).join(', ')}\n"
+    puts board_string
+  end
+
+  def preset_pieces
+    board.each_with_index do |column, index|
+      column[-2] = Pawn.new('white')
+      column[1] = Pawn.new('black')
+
+      if [0, 7].include?(index)
+        column[-1] = Rook.new('white')
+        column[0] = Rook.new('black')
+      elsif [1, 6].include?(index)
+        column[-1] = Knight.new('white')
+        column[0] = Knight.new('black')
+      elsif [2, 5].include?(index)
+        column[-1] = Bishop.new('white')
+        column[0] = Bishop.new('black')
+      elsif index == 3
+        column[-1] = Queen.new('white')
+        column[0] = Queen.new('black')
+      elsif index == 4
+        column[-1] = King.new('white')
+        column[0] = King.new('black')
+      end
+    end
+  end
 
   def no_obstacles?(start_post, end_post)
     return true if board.dig(*start_post).is_a? Knight
