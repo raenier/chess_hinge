@@ -26,6 +26,54 @@ class Chess
 
   def start
     display_board
+    game_intro
+
+    checkmate = false
+    until checkmate
+      @players.each do |color, player|
+        start_post = select_piece(color, player)
+        target_post = move_piece_to(start_post, player)
+
+        move_and_capture(start_post, target_post)
+        display_board
+      end
+
+      checkmate = checkmate?
+    end
+  end
+
+  private
+
+  def move_piece_to(start_post, player)
+    start_piece = board.dig(*start_post)
+
+    valid_position = false
+    until valid_position
+      print 'new_position: '
+      target_post = parse_input player
+      target_piece = board.dig(*target_post)
+      valid_position =
+        start_piece.valid_move?(start_post, target_post, target_piece) &&
+        inside_board?(target_post) &&
+        no_obstacles?(start_post, target_post)
+    end
+
+    target_post
+  end
+
+  def select_piece(color, player)
+    valid_start = false
+    until valid_start
+      print 'pick piece to move: '
+      start_post = parse_input player
+      piece = board.dig(*start_post)
+      valid_start = piece&.color == color.to_s
+    end
+
+    start_post
+  end
+
+  def game_intro
     puts "\n  Let Start the chess_match!"
 
     print "\nPlayer with white pieces, enter your NAME: "
@@ -34,38 +82,7 @@ class Chess
     @players[:black] = Player.new($stdin.gets.chomp)
 
     puts "#{@players[:white].name} starts the game:"
-
-    checkmate = false
-    until checkmate
-      @players.each do |color, player|
-        valid_start = false
-        until valid_start
-          print 'pick piece to move: '
-          start_post = parse_input player
-          start_piece = board.dig(*start_post)
-          valid_start = start_piece&.color == color.to_s
-        end
-
-        valid_position = false
-        until valid_position
-          print 'new_position: '
-          target_post = parse_input player
-          target_piece = board.dig(*target_post)
-          valid_position =
-            start_piece.valid_move?(start_post, target_post, target_piece) &&
-            inside_board?(target_post) &&
-            no_obstacles?(start_post, target_post)
-        end
-
-        start_piece.initial_move = false
-        move_and_capture(start_post, target_post)
-        display_board
-      end
-      checkmate = checkmate?
-    end
   end
-
-  private
 
   def set_board
     Array.new(8) { Array.new(8) }
@@ -161,6 +178,7 @@ class Chess
     target_piece = board.dig(*target)
     @captured_pieces[target_piece.color.to_sym] << target_piece if target_piece
 
+    piece.initial_move = false if piece.initial_move
     board[target[0]][target[1]] = piece
     board[start[0]][start[1]] = nil
   end
